@@ -3,7 +3,11 @@ class TodosController < ApplicationController
 
   def index
     @todos = Todo.order(:id).page params[:page]
-    render json: { todos: @todos.map(&:as_api_json) }
+    render json: {
+      current_page: Todo.page(params[:page]).current_page,
+      total_page: Todo.page(params[:page]).total_pages,
+      data: @todos.map(&:as_api_json)
+    }
   end
 
   def create
